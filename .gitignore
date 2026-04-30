@@ -13,3 +13,17 @@ venv/
 
 # Ignore ONLY full dataset (not sample!)
 data/Full_data/
+
+# Jupyter Notebook checkpoints (IMPORTANT for .ipynb files!)
+.ipynb_checkpoints/
+*/.ipynb_checkpoints/*
+
+# VS Code workspace files (since you're using VS Code)
+.vscode/
+*.code-workspace
+
+# macOS system files (common in team projects)
+.DS_Store
+
+# Jupyter notebook outputs (optional but recommended to keep repo clean)
+*.nbconvert.ipynb
