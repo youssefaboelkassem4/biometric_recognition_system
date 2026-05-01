@@ -1,15 +1,11 @@
-# Python
+
 __pycache__/
 *.pyc
 
-# Virtual environments
 venv/
 
-# Environment variables
 .env
 
-# IDE files
 .idea/
 
-# Ignore ONLY full dataset (not sample!)
 data/Full_data/
