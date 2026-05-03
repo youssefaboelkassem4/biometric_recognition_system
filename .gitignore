@@ -8,23 +8,6 @@ venv/
 
 .idea/
 
-<<<<<<< HEAD
-data/Full_data/
-=======
-# Ignore ONLY full dataset (not sample!)
 data/Full_data/
 
-# Jupyter Notebook checkpoints (IMPORTANT for .ipynb files!)
-.ipynb_checkpoints/
-*/.ipynb_checkpoints/*
-
-# VS Code workspace files (since you're using VS Code)
-.vscode/
-*.code-workspace
-
-# macOS system files (common in team projects)
-.DS_Store
-
-# Jupyter notebook outputs (optional but recommended to keep repo clean)
-*.nbconvert.ipynb
->>>>>>> b9107369d71076f60b30f87ed9ea25e872d105a1
+.venv/
