@@ -2,7 +2,8 @@ from pathlib import Path
 import cv2
 import numpy as np
 
-def load_face_dataset(base_path="../data/Full_data", img_size=(128, 128)):
+def load_face_dataset(img_size=(128, 128)):
+    base_path = Path(__file__).resolve().parent.parent / "data" / "Full_data"
     training = []
     testing  = []
 
