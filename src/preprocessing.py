@@ -29,8 +29,8 @@ def load_face_dataset(img_size=(128, 128)):
             vector     = normalized.flatten()
 
             if idx < 12:
-                training.append(vector)
+              training.append((subfolder.name, vector))
             else:
-                testing.append(vector)
+                testing.append((subfolder.name, vector))
 
     return np.array(training), np.array(testing)
