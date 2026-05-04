@@ -1,3 +1,7 @@
+from preprocessing import *
+from feature_extraction import *
+from matching import *
+from evaluation import *
 import os
 from preprocessing import load_face_dataset
 from feature_extraction import EigenfaceExtractor
@@ -42,3 +46,4 @@ print(f"Feature vector shape: {sample_vector.shape}")   # should say (75,)
 print(f"Sample values: {sample_vector[:5].round(3)}")
 
 print("\nAll done. Ready for matching.")
+
