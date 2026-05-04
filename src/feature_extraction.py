@@ -31,14 +31,14 @@ class EigenfaceExtractor:
             return self.pca.transform(x).ravel() # shape: (75,)
         
 
-    def save(self, path='pca_model.pkl'):
+    def save(self, path='models/pca_model.pkl'):
             with open(path, 'wb') as f:
                 pickle.dump(self,f)
             print(f"PCA model saved to {path}")   
 
         
     @staticmethod
-    def load(path='pca_model.pkl'):
+    def load(path='models/pca_model.pkl'):
             with open(path, 'rb') as f:
                 model = pickle.load(f)
             print(f"PCA model loaded from {path}")
