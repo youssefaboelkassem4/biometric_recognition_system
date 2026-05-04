@@ -4,8 +4,8 @@ import numpy as np
 
 def load_face_dataset(img_size=(128, 128)):
     base_path = Path(__file__).resolve().parent.parent / "data" / "Full_data"
-    training = []
-    testing  = []
+    training = {}
+    testing  = {}
 
     for subfolder in sorted(Path(base_path).iterdir()):
         if not subfolder.is_dir():
@@ -29,8 +29,12 @@ def load_face_dataset(img_size=(128, 128)):
             vector     = normalized.flatten()
 
             if idx < 12:
-              training.append((subfolder.name, vector))
+                if subfolder.name not in training:
+                    training[subfolder.name] = []
+                training[subfolder.name].append(vector)
             else:
-                testing.append((subfolder.name, vector))
+                if subfolder.name not in testing:
+                    testing[subfolder.name] = []
+                testing[subfolder.name].append(vector)
 
-    return np.array(training), np.array(testing)
+    return training, testing

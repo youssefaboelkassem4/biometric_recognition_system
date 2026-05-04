@@ -10,7 +10,7 @@ class EigenfaceExtractor:
         self.fitted = False
 
 
-    def fit(self, preprocessed_train_dir):
+    def fit(self, gallery):
         images=[]
         for subject_id, face_list in gallery.items():
             for face in face_list:
@@ -23,8 +23,7 @@ class EigenfaceExtractor:
 
         var_retained=self.pca.explained_variance_ratio_.cumsum()[-1]
         print(f"PCA fitted on {len(images)} images.")
-        print(f"{self.n_components} components retain {var * 100:.1f}% of variance.")
-        
+        print(f"{self.n_components} components retain {var_retained * 100:.1f}% of variance.")        
 
     def extract(self, face_img):
             assert self.fitted,  "Call fit() before extract()."
@@ -44,6 +43,7 @@ class EigenfaceExtractor:
                 model = pickle.load(f)
             print(f"PCA model loaded from {path}")
             return model
+
 
 from skimage.feature import local_binary_pattern
 
