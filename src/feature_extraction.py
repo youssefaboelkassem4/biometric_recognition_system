@@ -1,5 +1,8 @@
 import numpy as np
 from sklearn.decomposition import PCA
+from skimage.feature import local_binary_pattern
+from skimage.feature import hog as skimage_hog
+from preprocessing import *
 import pickle
 import os
 
@@ -45,15 +48,56 @@ class EigenfaceExtractor:
             return model
 
 
-from skimage.feature import local_binary_pattern
 
-def extract_lbp(images, img_size=(128, 128), neighbors=8, radius=1, n=256):
-    features = []
-    for i in images:
-        img     = (i.reshape(img_size) * 255).astype(np.uint8)
-        lbp     = local_binary_pattern(img, P=neighbors, R=radius, method="uniform")
-        hist, _ = np.histogram(lbp.ravel(), bins=n, range=(0, n))
-        hist    = hist.astype(np.float32)
-        hist   /= hist.sum() + 1e-6
-        features.append(hist)
-    return np.array(features, dtype=np.float32)
+
+
+
+class LBPExtractor:
+      def __init__(self, img_size=(128, 128), neighbors=8, radius=1,n=256):
+        self.img_size = img_size
+        self.neighbors = neighbors
+        self.radius = radius
+        self.n = n
+        
+      def fit (self,gallery=None):
+        pass
+
+
+      def extract(self, face_img):
+        img = (face_img.reshape(self.img_size) * 255).astype(np.uint8)
+        lbp = local_binary_pattern(img, P=self.neighbors, R=self.radius, method="default")
+        hist, _ = np.histogram(lbp.ravel(), bins=self.n, range=(0, self.n))
+        hist = hist.astype(np.float32)
+        hist /= hist.sum() + 1e-6
+        return hist    
+   
+
+
+
+class HOGExtractor:
+    def __init__(self, img_size=(128, 128), orientations=9, pixels_per_cell=(8, 8), cells_per_block=(2, 2), block_norm='L2-Hys'):
+        
+    
+        self.img_size        = img_size
+        self.orientations    = orientations
+        self.pixels_per_cell = pixels_per_cell
+        self.cells_per_block = cells_per_block
+        self.block_norm      = block_norm
+       
+        
+    
+    def fit(self, gallery=None):   
+        pass
+    
+    def extract(self, face_img): 
+        img = face_img.reshape(self.img_size).astype(np.float32)
+        descriptor = skimage_hog(
+            img,
+            orientations=self.orientations,
+            pixels_per_cell=self.pixels_per_cell,
+            cells_per_block=self.cells_per_block,
+            block_norm=self.block_norm,
+            feature_vector=True,   
+        )
+        return descriptor.astype(np.float32)  
+        
