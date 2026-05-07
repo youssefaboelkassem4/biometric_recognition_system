@@ -47,3 +47,46 @@ print(f"Sample values: {sample_vector[:5].round(3)}")
 
 print("\nAll done. Ready for matching.")
 
+# ── Step 4: Matching (Comparing Methods) ───────────────────────────────────
+print("\n" + "=" * 50)
+print("STEP 4: Matching (Comparing Methods)")
+print("=" * 50)
+
+total_probes = len(probe_features)
+
+# ==========================================
+# 1. EUCLIDEAN DISTANCE EVALUATION
+# ==========================================
+print("\n--- Running evaluation for: EUCLIDEAN ---")
+euclidean_correct = 0
+
+for probe_id, probe_vector in probe_features.items():
+    predicted_id, _ = identify_subject(probe_vector, gallery_features, metric='euclidean')
+    if predicted_id == probe_id:
+        euclidean_correct += 1
+
+euclidean_rank1 = (euclidean_correct / total_probes) * 100
+print(f"Euclidean Rank-1 Accuracy: {euclidean_rank1:.2f}%")
+
+# Generate the lists of scores for the curves
+euc_genuine, euc_imposter = compute_all_scores(gallery_features, probe_features, metric='euclidean')
+print(f"Generated {len(euc_genuine)} Genuine and {len(euc_imposter)} Imposter scores.")
+
+
+# ==========================================
+# 2. COSINE DISTANCE EVALUATION
+# ==========================================
+print("\n--- Running evaluation for: COSINE ---")
+cosine_correct = 0
+
+for probe_id, probe_vector in probe_features.items():
+    predicted_id, _ = identify_subject(probe_vector, gallery_features, metric='cosine')
+    if predicted_id == probe_id:
+        cosine_correct += 1
+
+cosine_rank1 = (cosine_correct / total_probes) * 100
+print(f"Cosine Rank-1 Accuracy: {cosine_rank1:.2f}%")
+
+# Generate the lists of scores for the curves
+cos_genuine, cos_imposter = compute_all_scores(gallery_features, probe_features, metric='cosine')
+print(f"Generated {len(cos_genuine)} Genuine and {len(cos_imposter)} Imposter scores.")
