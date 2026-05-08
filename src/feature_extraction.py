@@ -63,14 +63,38 @@ class LBPExtractor:
         pass
 
 
-      def extract(self, face_img):
+      def extract(self, face_img, grid=(4, 4)):
+        # Step 1: convert flat array back to 2D image, scale 0-1 → 0-255
         img = (face_img.reshape(self.img_size) * 255).astype(np.uint8)
-        lbp = local_binary_pattern(img, P=self.neighbors, R=self.radius, method="default")
-        hist, _ = np.histogram(lbp.ravel(), bins=self.n, range=(0, self.n))
-        hist = hist.astype(np.float32)
-        hist /= hist.sum() + 1e-6
-        return hist    
-   
+        
+        h, w = img.shape          # 128, 128
+        cell_h = h // grid[0]     # 128 / 4 = 32 pixels tall per cell
+        cell_w = w // grid[1]     # 128 / 4 = 32 pixels wide per cell
+        features = []
+
+        for r in range(grid[0]):       # rows: 0, 1, 2, 3
+            for c in range(grid[1]):   # cols: 0, 1, 2, 3
+                # Cut out one cell from the image
+                cell = img[r*cell_h : (r+1)*cell_h,
+                        c*cell_w : (c+1)*cell_w]
+
+                # Compute LBP on just this cell
+                lbp = local_binary_pattern(
+                    cell, P=self.neighbors, R=self.radius, method="default"
+                )
+
+                # Histogram of LBP codes in this cell
+                hist, _ = np.histogram(
+                    lbp.ravel(), bins=self.n, range=(0, self.n)
+                )
+                hist = hist.astype(np.float32)
+                hist /= hist.sum() + 1e-6   # normalize
+
+                features.extend(hist)   # add this cell's 256 numbers
+
+        # 4x4 grid × 256 bins = 1024 numbers total
+        return np.array(features, dtype=np.float32)
+    
 
 
 
