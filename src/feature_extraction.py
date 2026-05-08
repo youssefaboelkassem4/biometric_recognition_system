@@ -48,10 +48,6 @@ class EigenfaceExtractor:
             return model
 
 
-
-
-
-
 class LBPExtractor:
       def __init__(self, img_size=(128, 128), neighbors=8, radius=1,n=256):
         self.img_size = img_size
