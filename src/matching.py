@@ -9,7 +9,9 @@ def compute_cosine(v1, v2):
     norm_v2 = np.linalg.norm(v2)
     return 1.0 - (dot_product / (norm_v1 * norm_v2))
 
-def identify_subject(probe_vector, gallery_features, metric='euclidean'):
+def identify_subject(probe_vector, gallery_features, metric='euclidean', threshold=None):
+    
+    
     min_distance = float('inf')
     predicted_id = None
     
@@ -24,6 +26,10 @@ def identify_subject(probe_vector, gallery_features, metric='euclidean'):
         if distance < min_distance:
             min_distance = distance
             predicted_id = subject_id
+
+    # ── Open-set rejection: distance too large → no match ──
+    if threshold is not None and min_distance > threshold:
+        return "Unknown", min_distance
             
     return predicted_id, min_distance
 

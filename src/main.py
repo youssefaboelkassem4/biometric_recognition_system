@@ -4,7 +4,7 @@ from feature_extraction import EigenfaceExtractor, LBPExtractor, HOGExtractor
 from build_features import build_gallery_features, build_probe_features
 from matching import identify_subject, compute_all_scores, compute_euclidean, compute_cosine
 from fusion import FusedExtractor
-from evaluation import fuse_genuine_impostor, run_full_evaluation
+from evaluation import fuse_genuine_impostor, run_full_evaluation, compute_eer
 
 # ── Step 1: Load data ──────────────────────────────────────────────────────
 print("=" * 50)
@@ -111,6 +111,29 @@ for method_name, (gal, prb) in methods.items():
         'rank1_euc': euc_rank1,
         'rank1_cos': cos_rank1,
     }
+
+# ── Step 5b: Open-set matching (with EER threshold) ──────────────────────
+print("\n" + "=" * 50)
+print("STEP 5b: Open-Set Matching (with rejection)")
+print("=" * 50)
+
+for method_name, info in all_scores.items():
+    gal, prb = methods[method_name]
+    _, threshold = compute_eer(info['genuine'], info['impostor'])
+
+    matched = 0
+    rejected = 0
+    false_match = 0
+    for pid, pvec in prb.items():
+        pred, _ = identify_subject(pvec, gal, metric='euclidean', threshold=threshold)
+        if pred == "Unknown":
+            rejected += 1
+        elif pred == pid:
+            matched += 1
+        else:
+            false_match += 1
+
+    print(f"  {method_name}: threshold={threshold:.4f}  matched={matched}  rejected={rejected}  false_match={false_match}")
 
 
 print("\n" + "=" * 50)
